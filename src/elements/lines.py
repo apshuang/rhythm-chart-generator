@@ -1,6 +1,6 @@
 # lines.py
 import pygame
-from ..settings import COLOR_BEAT, COLOR_MEASURE, COLOR_SUBDIVISION, SCREEN_HEIGHT
+from ..settings import COLOR_BEAT, COLOR_MEASURE, COLOR_SUBDIVISION, SCREEN_HEIGHT, SPEED
 
 class Line:
     """辅助线类，每个小节一条粗实线，每一拍（4分音符）一条虚线，每个16分音符一个点"""
@@ -8,8 +8,8 @@ class Line:
         self.x = origin_x
         self.line_type = line_type
 
-    def update(self, speed, dt):
-        self.x -= speed * dt
+    def update(self, dt):
+        self.x -= SPEED * dt
 
     def draw(self, surface):
         if self.line_type == 'measure':
@@ -23,13 +23,12 @@ class Line:
 
 
 class LineManager:
-    def __init__(self, speed) -> None:
-        self.speed = speed
+    def __init__(self) -> None:
         self.lines: list[Line] = []
         
     def update(self, dt):
         for line in self.lines:
-            line.update(self.speed, dt)
+            line.update(dt)
             
     def add_line(self, origin_x, line_type):
         self.lines.append(Line(origin_x, line_type))

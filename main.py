@@ -8,9 +8,9 @@ from src.elements import *
 from src.audio_player import *
 
 
-chart_path = r"E:\rhythm-chart-generator\rythm\am_master.tja"
-audio_path = r"E:\rhythm-chart-generator\rythm\am_master.ogg"
-chart_offset = 1.9  # @TODO: 后续需要加一个自动或手动的确认偏移量的按钮，否则很难对准
+chart_path = r"E:\rhythm-chart-generator\rythm\011662_03.tja"
+audio_path = r"E:\rhythm-chart-generator\rythm\1662.mp3"
+chart_offset = 0.9  # @TODO: 后续需要加一个自动或手动的确认偏移量的按钮，否则很难对准
 audio_offset = 0
 
 # 初始化
@@ -23,7 +23,7 @@ clock = pygame.time.Clock()
 judgement = JudgementCircle()
 
 # 小节线
-line_manager = LineManager(note_speed)
+line_manager = LineManager()
 
 # 歌曲元信息（假设拍号每小节不同）
 song = SongMeta(chart_path, chart_offset)
@@ -32,6 +32,9 @@ events = song.get_events()
 # 音乐播放器
 audio_player = AudioPlayer(audio_path, audio_offset)
 audio_player.play()
+
+# 音符管理器
+note_manager = NoteManager(chart_path, chart_offset)
 
 running = True
 start_time = time.time()
@@ -50,10 +53,12 @@ while running:
 
     line_manager.update(dt)
     audio_player.update()
+    note_manager.update(now, dt)
 
     screen.fill(COLOR_BG)
     judgement.draw(screen)
     line_manager.draw_lines(screen)
+    note_manager.draw_notes(screen)
 
     pygame.display.flip()
 
